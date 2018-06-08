@@ -1,31 +1,27 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sat Jun  2 19:06:49 2018
+Created on Sat Jun  2 19:27:24 2018
 
 @author: Vassilis
 """
 import constants as c
 import pygame as pg
+import objet
 
-class Game :
-    def __init__(self):
-        pg.init()
-        self.display = pg.display.set_mode((c.WIDTH,c.HEIGHT))
-        self.display.fill((0,0,100))
-        self.running = True
-        self.clock = pg.time.Clock()
+class Fish(objet.Objet):
+	def __init__(self,pos = (c.WIDTH/2,c.HEIGHT/2)):
+		super().init()
 
-    def cleanup(self):
-        pg.quit()
-    
-    def events(self):
-        for ev in pg.event.get():
-            if ev.type == pg.QUIT:
-                self.running = False
-    
-    def run(self):
-        while(self.running):
-            self.events()
-            self.clock.tick(c.FPS)
-        
-        self.cleanup()
+		self._image = pg.Surface(30,30)
+		self._image.fill((255,0,0))
+
+		self._rect = self.image.get_rect()
+
+		self._x = pos[0]
+		self._y = pos[1]
+
+		self._vx = pos[0]
+		self._vy = pos[1]
+
+	def update(self):
+		pass
