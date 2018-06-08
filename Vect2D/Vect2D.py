@@ -24,7 +24,7 @@ class Vect2D:
 	def get_phi(self):
 		if(self.x==0 and self.y == 0):
 			return 0
-		return np.arctan2(self.y,self.x)
+		return np.deg2rad(np.arctan2(self.y,self.x))
 
 	def set_x(self,x):
 		self._vec[0] =x
@@ -33,10 +33,10 @@ class Vect2D:
 	def set_r(self,r):
 		self._vec = r/self.norm()*self._vec
 	def set_phi(self,phi):
-		""" Set phi in radians """
+		""" Set phi in degrees"""
 		r=self.r
-		self.x = np.cos(phi)*r
-		self.y = np.sin(phi)*r
+		self.x = np.cos(np.deg2rad(phi))*r
+		self.y = np.sin(np.deg2rad(phi))*r
 
 	x = property(get_x,set_x)
 	y = property(get_y,set_y)

@@ -36,4 +36,12 @@ class testVect(unittest.TestCase):
 		a.r = 3
 		self.assertEqual(3,a.norm())
 		self.assertEqual(0,b^a)
+	def polarCoord(self):
+		a = v.Vect2D([1,0])
+		self.assertEqual(a.r,1)
+		self.assertEqual(a.phi,0)
+		a[1]=-1
+		self.assertEqual(a.phi,315)
+		a.phi = 90
+		self.assertEqual(v.Vect2D([0,1]),a)
 unittest.main()
