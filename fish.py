@@ -7,7 +7,6 @@ Created on Sat Jun  2 19:27:24 2018
 import constants as c
 import pygame as pg
 import objet
-
 class Fish(objet.Objet):
 	def __init__(self,pos = (c.WIDTH/2,c.HEIGHT/2)):
 		super().init()
@@ -17,8 +16,7 @@ class Fish(objet.Objet):
 
 		self._rect = self.image.get_rect()
 
-		self._x = pos[0]
-		self._y = pos[1]
+		self._pos = 
 
 		self._vx = pos[0]
 		self._vy = pos[1]
