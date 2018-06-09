@@ -8,12 +8,14 @@ Created on Sat Jun  2 22:45:14 2018
 import numpy as np
 
 class Vect2D:
-	def __init__(self,vec=(0,0)):
+	def __init__(self,vec_or_x=(0,0),y=None):
 		"""Constructor expects a pair of numbers, in a tuple, list or Vect2D"""
-		if(isinstance(vec,Vect2D)):
-			self._vec = np.array(vec._vec)
+		if(y!=None):
+			self._vec=np.array([vec_or_x,y])
+		elif(isinstance(vec_or_x,Vect2D)):
+			self._vec = np.array(vec_or_x._vec)
 		else:
-			self._vec = np.array(vec)
+			self._vec = np.array(vec_or_x)
 
 	def get_x(self):
 		return self._vec[0]
@@ -25,6 +27,8 @@ class Vect2D:
 		if(self.x==0 and self.y == 0):
 			return 0
 		return np.deg2rad(np.arctan2(self.y,self.x))
+	def get_vec(self):
+		return (self.x,self.y)
 
 	def set_x(self,x):
 		self._vec[0] =x
@@ -42,6 +46,7 @@ class Vect2D:
 	y = property(get_y,set_y)
 	r = property(get_r,set_r)
 	phi = property(get_phi,set_phi)
+	vec = property(get_vec)
 
 	def __str__(self):
 		return "({},{})".format(self._vec[0],self._vec[1])
