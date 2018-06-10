@@ -41,7 +41,11 @@ class Vect2D:
 		r=self.r
 		self.x = np.cos(np.deg2rad(phi))*r
 		self.y = np.sin(np.deg2rad(phi))*r
-
+	def set_vec(self,vec):
+		if(len(vec)==2):
+			self._vec = np.array(vec)
+		else:
+			raise ValueError("vec attribute of Vect2D is supposed to be length 2")
 	x = property(get_x,set_x)
 	y = property(get_y,set_y)
 	r = property(get_r,set_r)

@@ -22,5 +22,7 @@ class Objet(pg.sprite.Sprite):
 	def _get_rect(self):
 		return self._rect
 
+	def draw(self, screen):
+		pass
 	image = property(_get_img)
 	rect = property(_get_rect)

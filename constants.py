@@ -4,8 +4,15 @@ Created on Sat Jun  2 19:02:16 2018
 
 @author: Vassilis
 """
-
-ETA = 4
+#Program variables
 WIDTH = 800
 HEIGHT = 600
 FPS = 60
+
+#Constant variables
+UP = 1
+DOWN = 2
+RIGHT = 3
+LEFT = 4
+#Physical constants
+ETA = 0.1
