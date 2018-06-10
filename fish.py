@@ -10,21 +10,21 @@ import objet
 from Vect2D import Vect2D as v
 
 class Fish(objet.Objet):
-	def __init__(self,pos = (c.WIDTH/2,c.HEIGHT/2)):
-		super().__init__()
+	def __init__(self,pos_or_x = (c.WIDTH/2,c.HEIGHT/2),y = None,*groups):
+		super().__init__(pos_or_x,y,groups)
 
 		self._image = pg.Surface((20,20))
 		self._image.fill((255,0,0))
 
 		self._rect = self.image.get_rect()
 
-		self._pos = v.Vect2D(pos)
-
 		self._vit = v.Vect2D(0,0)
 		self._acc = v.Vect2D(0,0)
 
 		self._force = 2000 #This describes basically how well the fish can change direction
 		self._mass = 3
+
+		self._score = 0
 	def update(self,dt):
 		#Normalise acceleration to match newton's law in all directions
 		if(self._acc != v.Vect2D(0,0)):
@@ -72,4 +72,10 @@ class Fish(objet.Objet):
 		else:
 			raise ValueError("Provided invalid direction")
 
-	pos = property(_get_pos)
+	def eat(self):
+		self._score+=1
+		print("Ate a little shit, score = {}".format(self.score))
+
+	def _get_score(self):
+		return self._score
+	score = property(_get_score)
