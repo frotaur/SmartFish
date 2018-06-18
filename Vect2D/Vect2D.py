@@ -26,7 +26,7 @@ class Vect2D:
 	def get_phi(self):
 		if(self.x==0 and self.y == 0):
 			return 0
-		return np.deg2rad(np.arctan2(self.y,self.x))
+		return np.rad2deg(np.arctan2(self.y,self.x))
 	def get_vec(self):
 		return (self.x,self.y)
 
@@ -46,6 +46,7 @@ class Vect2D:
 			self._vec = np.array(vec)
 		else:
 			raise ValueError("vec attribute of Vect2D is supposed to be length 2")
+	
 	x = property(get_x,set_x)
 	y = property(get_y,set_y)
 	r = property(get_r,set_r)

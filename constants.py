@@ -8,7 +8,7 @@ Created on Sat Jun  2 19:02:16 2018
 WIDTH = 800
 HEIGHT = 600
 FPS = 60
-
+MAXLOOPFRAME = 200
 #Constant variables
 UP = 1
 DOWN = 2
