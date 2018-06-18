@@ -16,6 +16,13 @@ class Fish(objet.Objet):
 		self._image = pg.Surface((20,20))
 		self._image.fill((255,0,0))
 
+		self._images = {"stop" : pg.Surface((20,20)), "move" : [pg.Surface((20,20)),pg.Surface((20,20))]}
+		self._images["stop"].fill((125,125,0))
+		self._images["move"][0].fill((255,0,0))
+		self._images["move"][1].fill((0,255,0))
+
+		self._frame = 0
+
 		self._rect = self.image.get_rect()
 
 		self._vit = v.Vect2D(0,0)
@@ -25,6 +32,7 @@ class Fish(objet.Objet):
 		self._mass = 3
 
 		self._score = 0
+
 	def update(self,dt):
 		#Normalise acceleration to match newton's law in all directions
 		if(self._acc != v.Vect2D(0,0)):
@@ -38,7 +46,21 @@ class Fish(objet.Objet):
 		if(self._vit.r<1 and self._acc.r == 0):
 			self._vit*= 0
 		#Eventually need to add the animations here too
-	
+		self._animate()
+
+	def _animate(self):
+		self._frame+=1
+		if(self._frame>=60):
+			self._frame = 0
+
+		if(self._acc == v.Vect2D(0,0)):
+			self._image = self._images["stop"]
+		else:
+			if(self._frame%30<15):
+				self._image = self._images["move"][0]
+			else:
+				self._image = self._images["move"][1]
+
 	def draw(self,screen):
 		screen.blit(self._image, self._rect)
 
