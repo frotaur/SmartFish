@@ -45,11 +45,31 @@ class Fish(objetAnime.ObjetAnime):
 		self._vit += self._acc*dt-(c.ETA/self._mass)*self._vit
 		self._pos += self._vit*dt
 		self._rect.center= self._pos.vec
+		collided = {"x" : False,"y":False}
+		if(self._rect.centerx+self._rect.width/2>c.WIDTH):
+			self._pos.x = c.WIDTH-self._rect.width/2
+			collided["x"] = True
+		elif(self._rect.centerx-self._rect.width/2<0):
+			self._pos.x = self._rect.width/2
+			collided["x"] = True
 
+		if(self._rect.centery+self._rect.height/2>c.HEIGHT):
+			self._pos.y = c.HEIGHT-self._rect.height/2
+			collided["y"] = True
+		elif(self._rect.centery-self._rect.height/2<0):
+			self._pos.y = self._rect.height/2
+			collided["y"] = True
+
+		if(collided["x"] == True):
+			self._rect.center = self._pos.vec
+			self._vit.x= 0
+		if(collided["y"]== True):
+			self._rect.center = self._pos.vec
+			self._vit.y= 0
 		#This is just to stop the fish when its too slow
 		if(self._vit.r<1 and self._acc.r == 0):
 			self._vit*= 0
-		#Eventually need to add the animations here too
+		#Animate :
 		self._animate()
 
 	def _animate(self):
@@ -95,6 +115,7 @@ class Fish(objetAnime.ObjetAnime):
 				self._acc.x = 0
 		else:
 			raise ValueError("Provided invalid direction")
+
 
 	def eat(self):
 		self._score+=1
