@@ -5,37 +5,34 @@ Created on Sat Jun  2 19:27:24 2018
 @author: Vassilis
 """
 import constants as c
-import pygame as pg
+
 import objetAnime
 import spriteAnim as spri
 from Vect2D import Vect2D as v
+import os
 
 class Fish(objetAnime.ObjetAnime):
 	def __init__(self,pos_or_x = (c.WIDTH/2,c.HEIGHT/2),y = None,*groups):
 		super().__init__(pos_or_x,y,groups)
+		self._force = 2000 #This describes basically how well the fish can change direction
+		self._mass = 3
+		self._score = 0
 
-		self._image = pg.Surface((20,20))
-		self._image.fill((255,0,0))
 		self._statedict = {}
-		stopSurf = pg.Surface((20,20))
-		stopSurf.fill((125,125,0))
-		self._statedict["stop"] = spri.SpriteAnim([stopSurf],0)
-		moveSurfs = [pg.Surface((20,20)),pg.Surface((20,20))]
-		moveSurfs[1].fill((255,0,0))
-		moveSurfs[0].fill((0,255,0))
-		self._statedict["move"] = spri.SpriteAnim(moveSurfs,30)
+		tempSpri = spri.SpriteAnim(0)
+		tempSpri.loadAll(os.path.join("Graphics","rest"),"rest.png")
+		self._statedict["stop"] = tempSpri
 
-		self._state = "stop"
-
-		self._rect = self.image.get_rect()
+		tempSpri2 = spri.SpriteAnim(40)
+		tempSpri2.loadAll(os.path.join("Graphics","swim"),"swim.png")
+		self._statedict["move"] = tempSpri2
 
 		self._vit = v.Vect2D(0,0)
 		self._acc = v.Vect2D(0,0)
 
-		self._force = 2000 #This describes basically how well the fish can change direction
-		self._mass = 3
-
-		self._score = 0
+		self._state = "stop"
+		self._image = self._statedict[self._state].findCurrentImage(0)
+		self._rect = self.image.get_rect()
 
 	def update(self,dt):
 		#Normalise acceleration to match newton's law in all directions
