@@ -22,6 +22,7 @@ class Game:
 		self.playfish = fish.Fish()
 		self.foods = groupObjet.GroupObjet()
 		self.foodQty = 10
+
 		for i in range(self.foodQty):
 			self.foods.add(food.Food(rand.randrange(0,c.WIDTH),rand.randrange(0,c.HEIGHT)))
 	def cleanup(self):

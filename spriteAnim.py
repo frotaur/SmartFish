@@ -9,29 +9,36 @@ import os
 
 class SpriteAnim():
 	"""Class containing all the necessary information to create an animation"""
-	def __init__(self, looptime, animationlist = None, framelist = None):
+	def __init__(self, looptime_or_sprit, animationlist = None, framelist = None):
 		""" #looptime_or_sprit : time to complete one animation loop (in number of frames) OR another SpriteAnim
 			#animationlist : list containing surfaces of the animation in order,
 			#framelist : list with time at which to flip frames. Must have length
 				n-1 where n = len(animationlist). Also, max(framelist)<looptime 
 				If no framelist is provided, frames are evenly distributed"""
-		if(isinstance(animationlist,list)):
-			#If a list is provided, add it :
-			self._animationlist = animationlist
-			if(len(animationlist)==1):
-				self._looptime = 0
-			else:
-				self._looptime = looptime
-
-			if(framelist == None):
-				self._evenOutAnimation()
-			else :
-				self._addFramelist(framelist)
+		if(isinstance(looptime_or_sprit,SpriteAnim)):
+			self._looptime = looptime_or_sprit.looptime
+			self._animationlist = looptime_or_sprit.animationlist
+			self._framelist = looptime_or_sprit.framelist
 		else:
-			#If no list is provided we are done
-			self._looptime = looptime
-			self._animationlist = None
-			self._framelist = None
+			if(isinstance(animationlist,list)):
+				#If a list is provided, add it :
+				self._animationlist = animationlist
+				if(len(animationlist)==1):
+					self._looptime = 0
+					self._framelist = [0]
+				else:
+					self._looptime = looptime_or_sprit
+					if(framelist == None):
+						self._evenOutAnimation()
+					else :
+						self._addFramelist(framelist)
+
+				
+			else:
+				#If no list is provided we are done
+				self._looptime = looptime_or_sprit
+				self._animationlist = None
+				self._framelist = None
 
 	def loadImage(self,folder,filename,frametime=None):
 		"""Loads image folder/filename into the animationlist.
@@ -68,6 +75,15 @@ class SpriteAnim():
 
 		framelist.append(self._looptime)
 		self._framelist = framelist
+
+	# def rotate(self,angle):
+	# 	""" Returns SpriteAnim with rotated animation"""
+	# 	newAnimationList = []
+	# 	for surf in self._animationlist:
+	# 		newAnimationList.append(pg.transform.rotate(surf,angle))
+	# 	newSprit = SpriteAnim(self._looptime,newAnimationList,self._framelist[:-1])
+	# 	return newSprit
+
 
 	def loadAll(self,folder,filename,framelist=None):
 		"""Load all images in folder that have name filename1, filename2...

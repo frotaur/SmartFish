@@ -10,6 +10,9 @@ import objetAnime
 import spriteAnim as spri
 from Vect2D import Vect2D as v
 import os
+import pygame as pg
+import math as m
+import food
 
 class Fish(objetAnime.ObjetAnime):
 	def __init__(self,pos_or_x = (c.WIDTH/2,c.HEIGHT/2),y = None,*groups):
@@ -17,13 +20,14 @@ class Fish(objetAnime.ObjetAnime):
 		self._force = 2000 #This describes basically how well the fish can change direction
 		self._mass = 3
 		self._score = 0
+		self._angle = 0
 
 		self._statedict = {}
-		tempSpri = spri.SpriteAnim(0)
+		tempSpri = spri.SpriteAnim(60)
 		tempSpri.loadAll(os.path.join("Graphics","rest"),"rest.png")
 		self._statedict["stop"] = tempSpri
 
-		tempSpri2 = spri.SpriteAnim(40)
+		tempSpri2 = spri.SpriteAnim(30)
 		tempSpri2.loadAll(os.path.join("Graphics","swim"),"swim.png")
 		self._statedict["move"] = tempSpri2
 
@@ -39,10 +43,12 @@ class Fish(objetAnime.ObjetAnime):
 		if(self._acc != v.Vect2D(0,0)):
 			self._acc.r = self._force/self._mass
 		#Equations of motion :
+		self._rect = self._image.get_rect()
 		self._vit += self._acc*dt-(c.ETA/self._mass)*self._vit
 		self._pos += self._vit*dt
-		self._rect.center= self._pos.vec
+		self._rect.center = self._pos.vec
 		collided = {"x" : False,"y":False}
+
 		if(self._rect.centerx+self._rect.width/2>c.WIDTH):
 			self._pos.x = c.WIDTH-self._rect.width/2
 			collided["x"] = True
@@ -66,25 +72,28 @@ class Fish(objetAnime.ObjetAnime):
 		#This is just to stop the fish when its too slow
 		if(self._vit.r<1 and self._acc.r == 0):
 			self._vit*= 0
+
 		#Animate :
 		self._animate()
-
 	def _animate(self):
 		self._nbframes = (self._nbframes+1)%c.MAXLOOPFRAME
-
-		if(self._acc == v.Vect2D(0,0) and self._state!="stop"):
+		
+		if(self._vit != v.Vect2D(0,0)):
+				self._angle = self._vit.phi
+		
+		if(self._acc == v.Vect2D(0,0)):
 			self._state = "stop"
-		elif(self._state!="move" and self._acc!=v.Vect2D(0,0)):
-			self._nbframes = 0
+		elif(self._acc!=v.Vect2D(0,0)):
+			if(self._state != "move"):
+				self._nbframes = 0
 			self._state = "move"
-
-		self._image = self._statedict[self._state].findCurrentImage(self._nbframes)
+			#self._angle = self._acc.phi
+			#for anim in self._statedict:
+			#	self._statedict[anim] = self._statedict[anim].rotate(self._acc.phi-90)
+		self._image = pg.transform.rotate(self._statedict[self._state].findCurrentImage(self._nbframes),-self._angle-90)
 
 	def draw(self,screen):
 		screen.blit(self._image, self._rect)
-
-	def _get_pos(self):
-		return self._pos
 
 	def move(self, direction, active):
 		"""Tell fish if it is currently swimming in the specified direction
@@ -120,4 +129,5 @@ class Fish(objetAnime.ObjetAnime):
 
 	def _get_score(self):
 		return self._score
+
 	score = property(_get_score)
