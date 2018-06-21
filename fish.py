@@ -11,8 +11,7 @@ import spriteAnim as spri
 from Vect2D import Vect2D as v
 import os
 import pygame as pg
-import math as m
-import food
+
 
 class Fish(objetAnime.ObjetAnime):
 	def __init__(self,pos_or_x = (c.WIDTH/2,c.HEIGHT/2),y = None,*groups):
@@ -27,7 +26,7 @@ class Fish(objetAnime.ObjetAnime):
 		tempSpri.loadAll(os.path.join("Graphics","rest"),"rest.png")
 		self._statedict["stop"] = tempSpri
 
-		tempSpri2 = spri.SpriteAnim(30)
+		tempSpri2 = spri.SpriteAnim(32)
 		tempSpri2.loadAll(os.path.join("Graphics","swim"),"swim.png")
 		self._statedict["move"] = tempSpri2
 
@@ -48,6 +47,9 @@ class Fish(objetAnime.ObjetAnime):
 		self._pos += self._vit*dt
 		self._rect.center = self._pos.vec
 		collided = {"x" : False,"y":False}
+
+		if(self._vit != v.Vect2D(0,0)):
+			self._angle = self._vit.phi
 
 		if(self._rect.centerx+self._rect.width/2>c.WIDTH):
 			self._pos.x = c.WIDTH-self._rect.width/2
@@ -77,9 +79,6 @@ class Fish(objetAnime.ObjetAnime):
 		self._animate()
 	def _animate(self):
 		self._nbframes = (self._nbframes+1)%c.MAXLOOPFRAME
-		
-		if(self._vit != v.Vect2D(0,0)):
-				self._angle = self._vit.phi
 		
 		if(self._acc == v.Vect2D(0,0)):
 			self._state = "stop"
