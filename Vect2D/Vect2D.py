@@ -7,10 +7,12 @@ Created on Sat Jun  2 22:45:14 2018
 
 import numpy as np
 
+
 class Vect2D:
 	def __init__(self,vec_or_x=(0,0),y=None):
 		"""Constructor expects a pair of numbers, in a tuple, list or Vect2D"""
-		if(y!=None):
+
+		if(y is not None):
 			self._vec=np.array([vec_or_x,y])
 		elif(isinstance(vec_or_x,Vect2D)):
 			self._vec = np.array(vec_or_x._vec)
@@ -19,28 +21,36 @@ class Vect2D:
 
 	def get_x(self):
 		return self._vec[0]
+
 	def get_y(self):
 		return self._vec[1]
+
 	def get_r(self):
 		return self.norm()
+
 	def get_phi(self):
 		if(self.x==0 and self.y == 0):
 			return 0
 		return np.rad2deg(np.arctan2(self.y,self.x))
+
 	def get_vec(self):
 		return (self.x,self.y)
 
 	def set_x(self,x):
 		self._vec[0] =x
+
 	def set_y(self,y):
 		self._vec[1]=y
+
 	def set_r(self,r):
 		self._vec = r/self.norm()*self._vec
+
 	def set_phi(self,phi):
 		""" Set phi in degrees"""
 		r=self.r
 		self.x = np.cos(np.deg2rad(phi))*r
 		self.y = np.sin(np.deg2rad(phi))*r
+
 	def set_vec(self,vec):
 		if(len(vec)==2):
 			self._vec = np.array(vec)

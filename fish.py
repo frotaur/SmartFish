@@ -16,13 +16,15 @@ import pygame as pg
 class Fish(objetAnime.ObjetAnime):
 	def __init__(self,pos_or_x = (c.WIDTH/2,c.HEIGHT/2),y = None,*groups):
 		super().__init__(pos_or_x,y,groups)
-		self._force = 2000 #This describes basically how well the fish can change direction
+		self._force = 2700  ##This describes basically how well the fish can change direction
 		self._mass = 3
 		self._score = 0
 		self._angle = 0
 
+		self._tastyboi = []
+
 		self._statedict = {}
-		tempSpri = spri.SpriteAnim(60)
+		tempSpri = spri.SpriteAnim(120)
 		tempSpri.loadAll(os.path.join("Graphics","rest"),"rest.png")
 		self._statedict["stop"] = tempSpri
 
@@ -31,7 +33,8 @@ class Fish(objetAnime.ObjetAnime):
 		self._statedict["move"] = tempSpri2
 
 		self._vit = v.Vect2D(0,0)
-		self._acc = v.Vect2D(0,0)
+		self._push = v.Vect2D(0,0)
+		self._omega = 800
 
 		self._state = "stop"
 		self._image = self._statedict[self._state].findCurrentImage(0)
@@ -39,17 +42,28 @@ class Fish(objetAnime.ObjetAnime):
 
 	def update(self,dt):
 		#Normalise acceleration to match newton's law in all directions
-		if(self._acc != v.Vect2D(0,0)):
-			self._acc.r = self._force/self._mass
+		if(self._push != v.Vect2D(0,0)):
+			self._push.r = self._force/self._mass
+		acc = self._push-(c.ETA/self._mass)*self._vit
 		#Equations of motion :
 		self._rect = self._image.get_rect()
-		self._vit += self._acc*dt-(c.ETA/self._mass)*self._vit
+		self._vit += acc*dt
 		self._pos += self._vit*dt
 		self._rect.center = self._pos.vec
-		collided = {"x" : False,"y":False}
+		self._angle = self._angleSet(self._angle,360,0)
 
+		collided = {"x" : False,"y":False}
+		print("vit : {}".format(self._vit.norm()))
 		if(self._vit != v.Vect2D(0,0)):
-			self._angle = self._vit.phi
+			delta_phi = self._vit.phi-self._angle
+			#Put delta_phi between [-pi/2,pi/2]
+			delta_phi = self._angleSet(delta_phi,90,-90)
+			add_angle = self._omega*dt
+
+			if(abs(delta_phi)<add_angle):
+				self._angle = self._vit.phi
+			else:
+				self._angle+= delta_phi/abs(delta_phi)*add_angle
 
 		if(self._rect.centerx+self._rect.width/2>c.WIDTH):
 			self._pos.x = c.WIDTH-self._rect.width/2
@@ -65,24 +79,25 @@ class Fish(objetAnime.ObjetAnime):
 			self._pos.y = self._rect.height/2
 			collided["y"] = True
 
-		if(collided["x"] == True):
+		if(collided["x"] is True):
 			self._rect.center = self._pos.vec
 			self._vit.x= 0
-		if(collided["y"]== True):
+		if(collided["y"] is True):
 			self._rect.center = self._pos.vec
 			self._vit.y= 0
 		#This is just to stop the fish when its too slow
-		if(self._vit.r<1 and self._acc.r == 0):
+		if(self._vit.r<1 and self._push.r == 0):
 			self._vit*= 0
 
 		#Animate :
 		self._animate()
+
 	def _animate(self):
 		self._nbframes = (self._nbframes+1)%c.MAXLOOPFRAME
-		
-		if(self._acc == v.Vect2D(0,0)):
+
+		if(self._push == v.Vect2D(0,0)):
 			self._state = "stop"
-		elif(self._acc!=v.Vect2D(0,0)):
+		elif(self._push!=v.Vect2D(0,0)):
 			if(self._state != "move"):
 				self._nbframes = 0
 			self._state = "move"
@@ -90,6 +105,16 @@ class Fish(objetAnime.ObjetAnime):
 			#for anim in self._statedict:
 			#	self._statedict[anim] = self._statedict[anim].rotate(self._acc.phi-90)
 		self._image = pg.transform.rotate(self._statedict[self._state].findCurrentImage(self._nbframes),-self._angle-90)
+
+	def _angleSet(self, angle, limsup, liminf):
+		interval = limsup-liminf
+		while(angle>limsup):
+			angle-=interval
+
+		while(angle<liminf):
+			angle+=interval
+
+		return angle
 
 	def draw(self,screen):
 		screen.blit(self._image, self._rect)
@@ -100,24 +125,24 @@ class Fish(objetAnime.ObjetAnime):
 		active : Bool to tell if swimming or not"""
 		if(direction == c.UP):
 			if(active):
-				self._acc.y = -1
+				self._push.y = -1
 			else:
-				self._acc.y = 0
+				self._push.y = 0
 		elif(direction == c.DOWN):
 			if(active):
-				self._acc.y = 1
+				self._push.y = 1
 			else:
-				self._acc.y = 0
+				self._push.y = 0
 		elif(direction == c.RIGHT):
 			if(active):
-				self._acc.x = 1
+				self._push.x = 1
 			else:
-				self._acc.x = 0
+				self._push.x = 0
 		elif(direction == c.LEFT):
 			if(active):
-				self._acc.x = -1
+				self._push.x = -1
 			else:
-				self._acc.x = 0
+				self._push.x = 0
 		else:
 			raise ValueError("Provided invalid direction")
 

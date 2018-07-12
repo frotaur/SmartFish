@@ -11,7 +11,9 @@ import groupObjet
 import food
 import random as rand
 
+
 class Game:
+
 	def __init__(self):
 		pg.init()
 		self.display = pg.display.set_mode((c.WIDTH,c.HEIGHT))
@@ -19,12 +21,13 @@ class Game:
 		self.display.fill(self.background)
 		self.running =True
 		self.clock = pg.time.Clock()
-		self.playfish = fish.Fish()
+		self.playfish = fish.Fish((20,20))
 		self.foods = groupObjet.GroupObjet()
 		self.foodQty = 10
 
 		for i in range(self.foodQty):
 			self.foods.add(food.Food(rand.randrange(0,c.WIDTH),rand.randrange(0,c.HEIGHT)))
+
 	def cleanup(self):
 		pg.quit()
 
@@ -53,11 +56,11 @@ class Game:
 		while(self.running):
 			self.events()
 			self.clock.tick(c.FPS)
-			self.update(1/c.FPS)
+			self.update(1./c.FPS)
 			self.draw()
 			pg.display.flip()
 
-		self.cleanup
+		self.cleanup()
 
 	def update(self,dt):
 		self.playfish.update(dt)
@@ -68,7 +71,8 @@ class Game:
 		if(nbFood<self.foodQty):
 			for i in range(self.foodQty-nbFood):
 				self.foods.add(food.Food(rand.randrange(0,c.WIDTH),rand.randrange(0,c.HEIGHT)))
+
 	def draw(self):
-		self.display.fill(self.background)#TO be changed with draw(background or something)
+		self.display.fill(self.background)  #TO be changed with draw(background or something)
 		self.playfish.draw(self.display)
 		self.foods.draw(self.display)

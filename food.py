@@ -7,6 +7,8 @@ Created on Sat Jun  6 18:33:49 2018
 import objet
 import pygame as pg
 import constants as c
+
+
 class Food(objet.Objet):
 	def __init__(self, pos_or_x=(c.WIDTH/2,c.HEIGHT/2),y=None,*groups):
 		super().__init__(pos_or_x,y,groups)
