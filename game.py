@@ -6,10 +6,11 @@ Created on Sat Jun  2 19:06:49 2018
 """
 import constants as c
 import pygame as pg
-import fish
+import playFish
 import groupObjet
 import food
 import random as rand
+import aiFish
 
 
 class Game:
@@ -21,9 +22,13 @@ class Game:
 		self.display.fill(self.background)
 		self.running =True
 		self.clock = pg.time.Clock()
-		self.playfish = fish.Fish((20,20))
+		self.playfish = playFish.playFish((20,20))
 		self.foods = groupObjet.GroupObjet()
 		self.foodQty = 10
+		self.aifish = aiFish.AIFish((160,200))
+		self.fishes = groupObjet.GroupObjet()
+		self.fishes.add(self.playfish)
+		self.fishes.add(self.aifish)
 
 		for i in range(self.foodQty):
 			self.foods.add(food.Food(rand.randrange(0,c.WIDTH),rand.randrange(0,c.HEIGHT)))
@@ -64,9 +69,13 @@ class Game:
 
 	def update(self,dt):
 		self.playfish.update(dt)
-		eat = pg.sprite.spritecollide(self.playfish,self.foods,True)
-		for dude in eat:
-			self.playfish.eat()
+		self.aifish.update(dt,self.foods)
+
+		for fish in self.fishes:
+			eat = pg.sprite.spritecollide(fish,self.foods,True)
+			for dude in eat:
+				fish.eat()
+
 		nbFood = len(self.foods.sprites())
 		if(nbFood<self.foodQty):
 			for i in range(self.foodQty-nbFood):
@@ -75,4 +84,5 @@ class Game:
 	def draw(self):
 		self.display.fill(self.background)  #TO be changed with draw(background or something)
 		self.playfish.draw(self.display)
+		self.aifish.draw(self.display)
 		self.foods.draw(self.display)

@@ -5,8 +5,8 @@ Created on Sat Jun  2 19:02:16 2018
 @author: Vassilis
 """
 #Program variables
-WIDTH = 800
-HEIGHT = 600
+WIDTH = 1000
+HEIGHT = 800
 FPS = 120
 MAXLOOPFRAME = 3600
 #Constant variables

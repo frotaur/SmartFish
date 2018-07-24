@@ -7,8 +7,10 @@ Created on Mon June 18 23:34:36 2018
 import pygame as pg
 import os
 
+
 class SpriteAnim():
 	"""Class containing all the necessary information to create an animation"""
+
 	def __init__(self, looptime_or_sprit, animationlist = None, framelist = None):
 		""" #looptime_or_sprit : time to complete one animation loop (in number of frames) OR another SpriteAnim
 			#animationlist : list containing surfaces of the animation in order,
@@ -28,7 +30,7 @@ class SpriteAnim():
 					self._framelist = [0]
 				else:
 					self._looptime = looptime_or_sprit
-					if(framelist == None):
+					if(framelist is None):
 						self._evenOutAnimation()
 					else :
 						self._addFramelist(framelist)
@@ -47,7 +49,7 @@ class SpriteAnim():
 		Not providing this parameter will evenly space the animation."""
 		newframe = pg.image.load(os.path.join(folder,filename))
 		self._animationlist.append(newframe)
-		if(frametime != None):
+		if(frametime is not None):
 			if(frametime>self._looptime):
 				raise ValueError("frametime > looptime")
 				self._framelist.pop()
@@ -94,12 +96,18 @@ class SpriteAnim():
 		i = 1
 		nextfile = filename[:dot]+str(i)+filename[dot:]
 		toOpen = os.path.join(folder,nextfile)
+		nonefound = True
+
 		while(os.path.isfile(toOpen)):
 			self._animationlist.append(pg.image.load(toOpen))
 			i+=1
 			nextfile = filename[:dot]+str(i)+filename[dot:]
 			toOpen = os.path.join(folder,nextfile)
-		if(framelist!=None):
+			nonefound = False
+
+		if(nonefound is True):
+			raise ValueError("No image found in specified path")
+		if(framelist is not None):
 			self._addFramelist(framelist)
 		else:
 			self._evenOutAnimation()
