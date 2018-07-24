@@ -5,6 +5,7 @@ Created on Sat Jun  2 19:02:16 2018
 @author: Vassilis
 """
 import pygame as pg
+ 
 class GroupObjet(pg.sprite.Group):
 	"""Re-implementation of sprite.Group class. Simply overrides
 	the original "draw" function to make sure it calls actually 

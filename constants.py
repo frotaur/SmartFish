@@ -15,4 +15,4 @@ DOWN = 2
 RIGHT = 3
 LEFT = 4
 #Physical constants
-ETA = 3.5
+ETA = 6

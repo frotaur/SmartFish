@@ -16,7 +16,7 @@ import pygame as pg
 class Fish(objetAnime.ObjetAnime):
 	def __init__(self,pos_or_x = (c.WIDTH/2,c.HEIGHT/2),y = None,*groups):
 		super().__init__(pos_or_x,y,groups)
-		self._force = 2700  ##This describes basically how well the fish can change direction
+		self._force = 2500  ##This describes basically how well the fish can change direction
 		self._mass = 3
 		self._score = 0
 		self._angle = 0
