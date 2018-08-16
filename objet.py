@@ -12,7 +12,7 @@ class Objet(pg.sprite.Sprite):
 	"""Base class for all objects, using Sprite from pygame.
 	Doesn't do much more than sprite, just uses a custom position
 	and add some properties. It's just to know what is happening."""
-	
+
 	def __init__(self,pos_or_x ,y = None, *groups):
 		pg.sprite.Sprite.__init__(self,groups)
 		self._image = None
@@ -31,7 +31,13 @@ class Objet(pg.sprite.Sprite):
 
 	def _get_pos(self):
 		return self._pos
-		
+
+	def collide(self, group, dokill):
+		"""Find Objet in group that collide with self and returns them in a list.
+		Uses the _rect attribute to determine collision, will fail otherwise.
+		dokill : boolean, if True then removes colliding sprites from group."""
+		return pg.sprite.spritecollide(self, group, dokill)
+
 	def draw(self, screen):
 		"""Override this function to tell how to draw the object"""
 		pass
@@ -39,4 +45,3 @@ class Objet(pg.sprite.Sprite):
 	image = property(_get_img)
 	rect = property(_get_rect)
 	pos = property(_get_pos)
-	

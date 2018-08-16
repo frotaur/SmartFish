@@ -37,7 +37,7 @@ class Vect2D:
 		return (self.x,self.y)
 
 	def set_x(self,x):
-		self._vec[0] =x
+		self._vec[0]=x
 
 	def set_y(self,y):
 		self._vec[1]=y
@@ -56,7 +56,7 @@ class Vect2D:
 			self._vec = np.array(vec)
 		else:
 			raise ValueError("vec attribute of Vect2D is supposed to be length 2")
-	
+
 	x = property(get_x,set_x)
 	y = property(get_y,set_y)
 	r = property(get_r,set_r)

@@ -21,6 +21,8 @@ class Fish(objetAnime.ObjetAnime):
 		self._mass = 3
 		self._score = 0
 		self._angle = 0
+		#Vecteur qui va du centre du poisson a la bouche du poisson
+		self._boucherel = v.Vect2D(0.,-15.)
 
 
 		self._statedict = {}

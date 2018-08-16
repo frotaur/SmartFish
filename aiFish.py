@@ -28,6 +28,11 @@ class AIFish(fish.Fish):
 		self._stateCirc["red"] = tempspri
 		self._circ = "red"
 
+		#testing
+		tempspri = spri.SpriteAnim(0)
+		tempspri.loadAll(os.path.join("Graphics","circle"),"mouth.png")
+		self._mouth = tempspri
+		#testing
 
 	def update(self,dt, environ):
 		self._move(environ)
@@ -38,9 +43,17 @@ class AIFish(fish.Fish):
 
 		circle = pg.transform.scale(self._stateCirc[self._circ].findCurrentImage(self._nbframes),(self._sightr*2,self._sightr*2))
 		therect = circle.get_rect()
+
+		#testing
+		circle2 = self._mouth.findCurrentImage(self._nbframes)
+		therect2 = circle2.get_rect()
+		self._boucherel.phi = self._angle
+		therect2.center = (self.pos+self._boucherel).vec
+		#testing
 		therect.center = self.pos.vec
 
 		screen.blit(circle,therect)
+		screen.blit(circle2,therect2)
 
 	def _move(self,environ):
 		"""Sees the surroundings and chooses to move"""
