@@ -72,7 +72,7 @@ class Game:
 		self.aifish.update(dt,self.foods)
 
 		for fish in self.fishes:
-			eat = fish.collide(self.foods,True)
+			eat = fish.collidemouth(self.foods,True)
 			for dude in eat:
 				fish.eat()
 

@@ -19,10 +19,12 @@ class Fish(objetAnime.ObjetAnime):
 		super().__init__(pos_or_x,y,groups)
 		self._force = 2500  ##This describes basically how well the fish can change direction
 		self._mass = 3
+		self._mouthsize = 10
 		self._score = 0
 		self._angle = 0
 		#Vecteur qui va du centre du poisson a la bouche du poisson
 		self._boucherel = v.Vect2D(0.,-15.)
+		self._mouthsize = 10.
 
 
 		self._statedict = {}
@@ -33,6 +35,12 @@ class Fish(objetAnime.ObjetAnime):
 		tempSpri2 = spri.SpriteAnim(32)
 		tempSpri2.loadAll(os.path.join("Graphics","swim"),"swim.png")
 		self._statedict["move"] = tempSpri2
+
+		#testing (affiche la bouche)
+		#tempspri = spri.SpriteAnim(0)
+		#tempspri.loadAll(os.path.join("Graphics","circle"),"mouth.png")
+		#self._mouth = tempspri
+		#testing
 
 		self._vit = v.Vect2D(0,0)
 		self._push = v.Vect2D(0,0)
@@ -54,6 +62,7 @@ class Fish(objetAnime.ObjetAnime):
 		self._pos += self._vit*dt
 		self._rect.center = self._pos.vec
 		self._angle = self._angleSet(self._angle,360,0)
+		self._boucherel.phi = self._angle
 
 		collided = {"x": False,"y":False}
 		if(self._vit != v.Vect2D(0,0)):
@@ -94,6 +103,19 @@ class Fish(objetAnime.ObjetAnime):
 		#Animate :
 		self._animate()
 
+	def collidemouth(self, group, dokill):
+		"""Return Objet in group that collide with the fish mouth"""
+		collisioners = []
+		for obj in group:
+			if (obj.pos-(self.pos+self._boucherel)).r<self._mouthsize:
+				collisioners.append(obj)
+
+		if(dokill):
+			for obj in collisioners:
+				group.remove(obj)
+
+		return collisioners
+
 	def _animate(self):
 		self._nbframes = (self._nbframes+1)%c.MAXLOOPFRAME
 
@@ -120,6 +142,13 @@ class Fish(objetAnime.ObjetAnime):
 
 	def draw(self,screen):
 		screen.blit(self._image, self._rect)
+
+		#testing (affiche la bouche)
+		#circle2 = self._mouth.findCurrentImage(self._nbframes)
+		#therect2 = circle2.get_rect()
+		#therect2.center = (self.pos+self._boucherel).vec
+		#screen.blit(circle2,therect2)
+		#testing
 
 
 	def eat(self):
